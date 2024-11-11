@@ -1,6 +1,7 @@
 package com.java.category;
 
-import lombok.AccessLevel;
+import jakarta.persistence.*;
+import lombok.*;
 
 @Entity
 @Getter

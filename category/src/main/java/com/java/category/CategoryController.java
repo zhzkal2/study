@@ -14,6 +14,12 @@ public class CategoryController {
 
     private final CategoryService categoryService;
 
+    @GetMapping("/")
+    public String hello() {
+        return "Hello, category!";
+    }
+
+
     // depth에 따라 카테고리 조회
     @GetMapping("/categories/{depth}")
     public ResponseEntity<List<CategoryResult>> getCategoriesByDepth(@PathVariable("depth") int depth,
