@@ -1,13 +1,10 @@
 package com.java.study;
 
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -17,7 +14,7 @@ public class CategoryService {
 
     private final CategoryRepository categoryRepository;
 
-    // 다국어와 특정 깊이를 기반으로 카테고리 가져오기
+    // 특정 깊이를 기반으로 카테고리 가져오기
     public List<CategoryResult> getCategoriesByDepthAndLanguage(int depth, String languageCode) {
         List<Category> topLevelCategories = categoryRepository.findAllByParentIsNull();
         return topLevelCategories.stream()
@@ -25,7 +22,7 @@ public class CategoryService {
                 .collect(Collectors.toList());
     }
 
-    // 무제한 깊이로 모든 카테고리 가져오기 (다국어 지원)
+    // 무제한 깊이로 모든 카테고리 가져오기
     public List<CategoryResult> getAllCategories(String languageCode) {
         List<Category> topLevelCategories = categoryRepository.findAllByParentIsNull();
         return topLevelCategories.stream()
@@ -34,8 +31,7 @@ public class CategoryService {
     }
 
 
-
-    // 다국어 이름과 깊이에 맞춰 카테고리를 변환
+    // 이름과 깊이에 맞춰 카테고리를 변환
     private CategoryResult mapCategoryWithDepthAndLanguage(Category category, int requestedDepth, String languageCode) {
         List<CategoryResult> children = mapChildren(category, requestedDepth, languageCode);
 
@@ -64,10 +60,5 @@ public class CategoryService {
         }
         return Collections.emptyList();
     }
-
-
-
-
-
 
 }
