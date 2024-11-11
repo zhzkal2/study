@@ -1,4 +1,4 @@
-package com.java.study;
+package com.java.category;
 
 import jakarta.persistence.*;
 import lombok.*;

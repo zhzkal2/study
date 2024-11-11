@@ -1,4 +1,4 @@
-package com.java.study.Config;
+package com.java.category.Config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
