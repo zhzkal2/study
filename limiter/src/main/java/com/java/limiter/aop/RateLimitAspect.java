@@ -1,6 +1,8 @@
 package com.java.limiter.aop;
 
 import com.java.limiter.BucketConfig;
+import com.java.limiter.annotation.RateLimited;
+import com.java.limiter.annotation.RequestType;
 import io.github.bucket4j.Bucket;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -22,13 +24,19 @@ public class RateLimitAspect {
 
 
     // @RateLimited 어노테이션이 붙은 메서드를 처리
-    @Around("@annotation(com.java.limiter.annotation.RateLimited)")
-    public Object applyRateLimit(ProceedingJoinPoint joinPoint) throws Throwable {
+    @Around("@annotation(rateLimited)")
+    public Object applyRateLimit(ProceedingJoinPoint joinPoint, RateLimited rateLimited) throws Throwable {
         try {
 
-            System.out.println(request);
             String ip = request.getRemoteAddr();
-            Bucket bucket = bucketConfig.getBucketForIp(ip);
+
+
+            Bucket bucket;
+            if (rateLimited.type() == RequestType.LOGIN) {
+                bucket = bucketConfig.getBucketForLogin(ip);
+            } else {
+                bucket = bucketConfig.getBucketForQuery(ip);
+            }
 
             // rate limiting 처리
             if (bucket.tryConsume(1)) {  // 요청을 1개 토큰만 소비
