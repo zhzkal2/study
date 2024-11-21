@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <!--스프링 컨벤션룰 정의-->
+    <conversionRule conversionWord="clr" converterClass="org.springframework.boot.logging.logback.ColorConverter"/>
+
+    <!--패턴 정의-->
+    <property name="CONSOL_LOG_PATTERN"
+              value="[%d{yyyy-MM-dd HH:mm:ss}] %clr(%5level) %magenta([PID: ${PID}]) --- [%15.15t] %cyan(%-40logger) : %msg%n"/>
+    <property name="FILE_LOG_PATTERN"
+              value="[%d{yyyy-MM-dd HH:mm:ss}] %5level [PID: ${PID}] --- [%15.15t] %-40logger : %msg%n"/>
+
+    <!-- PID를 로드 -->
+    <springProperty name="PID" source="PID" defaultValue="UNKNOWN"/>
+
+    <!--로그 파일 저장 위치-->
+    <property name="LOGS_PATH" value="./logs"/>
+    <!--    <springProfile name="local">-->
+    <!--        <property name="LOGS_PATH" value="./logs/local"/>-->
+    <!--    </springProfile>-->
+
+    <!--    <springProfile name="stage">-->
+    <!--        <property name="LOGS_PATH" value="./logs/stage"/>-->
+    <!--    </springProfile>-->
+
+    <!--    <springProfile name="prod">-->
+    <!--        <property name="LOGS_PATH" value="./logs/prod"/>-->
+    <!--    </springProfile>-->
+
+
+    <!-- 콘솔 로그 출력 설정 -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${CONSOL_LOG_PATTERN}</pattern>
+
+
+        </encoder>
+    </appender>
+
+    <!-- 파일 로그 출력 설정 -->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOGS_PATH}/logback.log</file> <!-- 로그 파일 경로 -->
+        <encoder>
+            <pattern>${FILE_LOG_PATTERN}</pattern>
+        </encoder>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOGS_PATH}/logback.%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <!-- or whenever the file size reaches 100MB -->
+                <maxFileSize>10KB</maxFileSize>
+                <!-- kb, mb, gb -->
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <!--30일 넘으면 삭제-->
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+
+
+    </appender>
+
+    <logger name="com.java" level="INFO"> <!--특정 패키지의 로그만 추적 -->
+        <appender-ref ref="FILE"/>
+    </logger>
+
+    <logger name="com.java" level="DEBUG"/>
+    <!-- 루트 로거 설정 -->
+    <root level="INFO"> <!-- 로그 레벨을 INFO로 설정 -->
+        <appender-ref ref="CONSOLE"/>
+    </root>
+
+
+</configuration>
+
