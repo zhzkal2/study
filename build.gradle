@@ -26,9 +26,11 @@ subprojects {
     dependencies {
         // 각 서브 프로젝트에서 필요한 의존성들만 추가
         implementation 'org.springframework.boot:spring-boot-starter-web'
+
         compileOnly 'org.projectlombok:lombok'
         annotationProcessor 'org.projectlombok:lombok'
         testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
 
     }
 
