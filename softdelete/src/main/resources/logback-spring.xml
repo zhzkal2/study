@@ -61,6 +61,7 @@
     <appender name="FLUENT" class="com.java.CustomFluentdAppender">
         <remoteHost>localhost</remoteHost> <!-- Fluentd가 실행 중인 호스트 -->
         <port>24224</port> <!-- Fluentd 포트 -->
+        <reconnectionDelay>10000</reconnectionDelay> <!-- 재접속 시도 간격 (10초) -->
         <tag>springboot</tag> <!-- 로그 태그 -->
     </appender>
 
