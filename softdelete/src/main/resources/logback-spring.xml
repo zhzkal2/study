@@ -63,19 +63,23 @@
         <port>24224</port> <!-- Fluentd 포트 -->
         <reconnectionDelay>10000</reconnectionDelay> <!-- 재접속 시도 간격 (10초) -->
         <tag>springboot</tag> <!-- 로그 태그 -->
-
-
     </appender>
 
 
-    <!--        <property name="FILE_LOG_PATTERN"-->
-    <!--                  value="[%d{yyyy-MM-dd HH:mm:ss}] %5level [PID: ${PID}] -&#45;&#45; [%15.15t] %-40logger : %msg%n"/>-->
-    <!--    </appender>-->
+    <!-- AsyncAppender로 비동기 처리 -->
+    <appender name="ASYNC_FLUENT" class="ch.qos.logback.classic.AsyncAppender">
+        <!-- 큐 사이즈 설정 -->
+        <queueSize>10000</queueSize> <!-- 최대 큐 크기 설정 -->
+        <neverBlock>false</neverBlock> <!-- 블록을 방지하기 위해 true 설정 -->
+        <maxFlushTime>1000</maxFlushTime> <!-- 최대 플러시 대기 시간 (밀리초) -->
+        <appender-ref ref="FLUENT"/> <!-- FLUENT appender 참조 -->
+    </appender>
+
 
 
     <logger name="com.java" level="INFO"> <!--특정 패키지의 로그만 추적 -->
         <appender-ref ref="FILE"/>
-        <appender-ref ref="FLUENT"/>
+        <appender-ref ref="ASYNC_FLUENT"/>
     </logger>
 
     <logger name="com.java" level="DEBUG"/>
