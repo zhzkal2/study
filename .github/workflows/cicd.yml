@@ -1,9 +1,8 @@
 name: JAVA CI with Gradle
 
 on:
-  workflow_dispatch:
-#  push :
-#    branches: ["main"]
+  push :
+    branches: ["main"]
 
 permissions:
   content: read
@@ -17,7 +16,7 @@ jobs:
       # 1. JAVA 설정
       - name: Set up JDK 17
         uses: actions/setup-java@v3
-        whit:
+        with:
           java-version: '17'
           distribution: 'temurin'
 
