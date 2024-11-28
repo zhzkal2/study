@@ -1,0 +1,16 @@
+FROM fluent/fluentd:v1.16.6-1.0
+
+# 권한 변경
+USER root
+
+# 필요한 플러그인 설치
+RUN gem install fluent-plugin-s3 -v 1.8.1
+
+# 설정 파일 복사
+COPY fluentd.conf /fluentd/etc/fluent.conf
+
+# 환경 변수 설정
+ENV TINI_SUBREAPER=true
+
+# Fluentd 실행 명령어 설정
+CMD ["fluentd", "-c", "/fluentd/etc/fluent.conf", "-p", "/fluentd/plugins"]

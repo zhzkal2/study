@@ -38,3 +38,4 @@ out/
 /logs/logback.log
 /logs/
 /softdelete/src/main/resources/application-local.properties
+/softdelete/.env
