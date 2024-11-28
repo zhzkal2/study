@@ -30,9 +30,8 @@ jobs:
         run: chmod +x gradlew
 
       # 4. Spring Boot 애플리케이션 빌드
-      - name: Build with Gradle
-        run: ./gradlew clean bootJar
-
+      - name: Build specific module
+        run: cd softdelete && ../gradlew clean bootJar
       # 5. Docker 이미지 빌드
       - name: Docker image build
         run: docker build -f softdelete/Dockerfile.spring -t ${{ secrets.DOCKER_USERNAME }}/spring-demo .
