@@ -1,8 +1,8 @@
 name: JAVA CI\CD with Gradle
 
 on:
-  push :
-    branches: ["main"]
+  push:
+    branches: [ "main" ]
 
 permissions:
   contents: read
@@ -57,9 +57,16 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.EC2_SSH_KEY }}
 
-
       - name: Connect to EC2
         run: |
-          ssh -o StrictHostKeyChecking=no ec2-user@${{secrets.EC2_PUBLIC_IP}} "echo 'Connected to EC2 successfully!'"
-
-
+          ssh -o StrictHostKeyChecking=no ec2-user@${{ secrets.EC2_PUBLIC_IP }} << 'EOF'
+            # AWS CLI로 S3에서 파일 다운로드
+            aws s3 cp s3://cicd-bucket-1004/5번.png /home/ec2-user/5번.png
+          
+            # 다운로드한 파일 존재 여부 확인
+            if [ -f /home/ec2-user/5번.png ]; then
+              echo "File downloaded successfully."
+            else
+              echo "File download failed."
+            fi
+          EOF
