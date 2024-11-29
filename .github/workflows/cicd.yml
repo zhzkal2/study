@@ -55,11 +55,11 @@ jobs:
       - name: Add SSH Key
         uses: webfactory/ssh-agent@v0.5.3
         with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+          ssh-private-key: ${{ secrets.EC2_SSH_KEY }}
 
 
       - name: Connect to EC2
         run: |
-          ssh -o StrictHostKeyChecking=no ec2-user@<EC2_PUBLIC_IP> "echo 'Connected to EC2 successfully!'"
+          ssh -o StrictHostKeyChecking=no ec2-user@${{secrets.EC2_PUBLIC_IP}} "echo 'Connected to EC2 successfully!'"
 
 
