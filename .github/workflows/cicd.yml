@@ -1,4 +1,4 @@
-name: JAVA CI with Gradle
+name: JAVA CI\CD with Gradle
 
 on:
   push :
@@ -45,3 +45,21 @@ jobs:
       # 7. Docker 이미지 푸시
       - name: Push Docker image
         run: docker push ${{ secrets.DOCKER_USERNAME }}/spring-demo
+
+
+  deploy:
+    name: Deploy to EC2
+    runs-on: ubuntu-latest
+    steps:
+      # 2. SSH 키 설정
+      - name: Add SSH Key
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+
+      - name: Connect to EC2
+        run: |
+          ssh -o StrictHostKeyChecking=no ec2-user@<EC2_PUBLIC_IP> "echo 'Connected to EC2 successfully!'"
+
+
