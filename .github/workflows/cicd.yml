@@ -58,18 +58,18 @@ jobs:
     runs-on: self-hosted
     steps:
       # 3. ec2에 S3 파일 다운로드
-#      - name: s3 file download
-#        run: |
-#          # 만약 파일이 있다면 최신화를 위해서 삭제
-#            if [ -f /home/ec2-user/5번.png ]; then
-#              echo "File already exists. Deleting the old file."
-#              rm /home/ec2-user/5번.png
-#            fi
-#
-#            # AWS CLI로 S3에서 파일 다운로드
-#            aws s3 cp s3://cicd-bucket-1004/5번.png /home/ec2-user/5번.png
+      #      - name: s3 file download
+      #        run: |
+      #          # 만약 파일이 있다면 최신화를 위해서 삭제
+      #            if [ -f /home/ec2-user/5번.png ]; then
+      #              echo "File already exists. Deleting the old file."
+      #              rm /home/ec2-user/5번.png
+      #            fi
+      #
+      #            # AWS CLI로 S3에서 파일 다운로드
+      #            aws s3 cp s3://cicd-bucket-1004/5번.png /home/ec2-user/5번.png
 
-      - name: s3 file download
+      - name: s3 file download 1
         run: |
           # 만약 파일이 있다면 최신화를 위해서 삭제
             if [ -f /home/ec2-user/.env ]; then
@@ -80,10 +80,12 @@ jobs:
             # AWS CLI로 S3에서 파일 다운로드
             aws s3 cp s3://cicd-bucket-1004/.env /home/ec2-user/.env
 
-            if [ -f /home/ec2-user/docker-compose.yml ]; then
-              echo "File already exists. Deleting the old file."
-              rm /home/ec2-user/docker-compose.yml
-            fi
-          docker-compose.yml
-            # AWS CLI로 S3에서 파일 다운로드
-            aws s3 cp s3://cicd-bucket-1004/docker-compose.yml /home/ec2-user/docker-compose.yml
+      - name: s3 file download 2
+        run: |
+          if [ -f /home/ec2-user/docker-compose.yml ]; then
+            echo "File already exists. Deleting the old file."
+            rm /home/ec2-user/docker-compose.yml
+          fi
+          
+          # AWS CLI로 S3에서 파일 다운로드
+          aws s3 cp s3://cicd-bucket-1004/docker-compose.yml /home/ec2-user/docker-compose.yml
