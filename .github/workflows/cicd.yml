@@ -57,18 +57,6 @@ jobs:
     needs: build-docker-image
     runs-on: self-hosted
     steps:
-      # 3. ec2에 S3 파일 다운로드
-      #      - name: s3 file download
-      #        run: |
-      #          # 만약 파일이 있다면 최신화를 위해서 삭제
-      #            if [ -f /home/ec2-user/5번.png ]; then
-      #              echo "File already exists. Deleting the old file."
-      #              rm /home/ec2-user/5번.png
-      #            fi
-      #
-      #            # AWS CLI로 S3에서 파일 다운로드
-      #            aws s3 cp s3://cicd-bucket-1004/5번.png /home/ec2-user/5번.png
-
       - name: s3 file download 1
         run: |
           # 만약 파일이 있다면 최신화를 위해서 삭제
@@ -93,4 +81,4 @@ jobs:
 
       - name: docker compose 사용
         run: |
-          sudo docker compose up -d
+          sudo docker-compose up -d
