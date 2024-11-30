@@ -31,7 +31,7 @@ jobs:
       # 4. Spring Boot 애플리케이션 빌드
       - name: Build specific module
         run: cd softdelete && ../gradlew clean bootJar
-      # 5. Docker 이미지 빌드
+      # 5. Docker 이미지 빌드 (Spring)
       - name: Docker image build
         run: docker build -f softdelete/Dockerfile.spring -t ${{ secrets.DOCKER_USERNAME }}/spring-demo .
 
@@ -39,7 +39,7 @@ jobs:
       - name: Build Fluentd Docker image
         run: docker build -f softdelete/Dockerfile.fluentd -t ${{ secrets.DOCKER_USERNAME }}/fluentd-demo softdelete
 
-      # 6. Docker
+      # 6. Docker 로그인
       - name: Docker login
         uses: docker/login-action@v2
         with:
@@ -57,7 +57,8 @@ jobs:
     needs: build-docker-image
     runs-on: self-hosted
     steps:
-      - name: s3 file download 1
+      # 1. s3에서 env 파일 다운로드
+      - name: s3 .env file download
         run: |
           # 만약 파일이 있다면 최신화를 위해서 삭제
             if [ -f /home/ec2-user/.env ]; then
@@ -67,8 +68,8 @@ jobs:
           
             # AWS CLI로 S3에서 파일 다운로드
             aws s3 cp s3://cicd-bucket-1004/.env /home/ec2-user/.env
-
-      - name: s3 file download 2
+      # 2. s3에서 docker compose 파일 다운로드
+      - name: s3 docker-compose file download
         run: |
           if [ -f /home/ec2-user/docker-compose.yml ]; then
             echo "File already exists. Deleting the old file."
@@ -78,7 +79,12 @@ jobs:
           # AWS CLI로 S3에서 파일 다운로드
           aws s3 cp s3://cicd-bucket-1004/docker-compose.yml /home/ec2-user/docker-compose.yml
 
-
-      - name: docker compose 사용
+      # 3. docker compose up
+      - name: Docker Compose 사용
         run: |
           sudo docker-compose up -d
+
+      # 4. 미사요 이미지 삭제
+      - name : Clean up old Docker images
+        run: |
+          sudo docker system prune -a -f
