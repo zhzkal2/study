@@ -37,7 +37,7 @@ jobs:
 
       # 6. Docker 이미지 빌드 (Fluentd)
       - name: Build Fluentd Docker image
-        run: docker build -f softdelete/Dockerfile.fluentd -t ${{ secrets.DOCKER_USERNAME }}/fluentd-demo .
+        run: docker build -f softdelete/Dockerfile.fluentd -t ${{ secrets.DOCKER_USERNAME }}/fluentd-demo softdelete
 
       # 6. Docker
       - name: Docker login

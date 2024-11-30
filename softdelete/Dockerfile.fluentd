@@ -7,7 +7,7 @@ USER root
 RUN gem install fluent-plugin-s3 -v 1.8.1
 
 # 설정 파일 복사
-COPY fluentd.conf /fluentd/etc/fluent.conf
+COPY ./fluentd.conf /fluentd/etc/fluent.conf
 
 # 환경 변수 설정
 ENV TINI_SUBREAPER=true
