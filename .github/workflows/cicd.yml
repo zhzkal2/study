@@ -89,3 +89,8 @@ jobs:
           
           # AWS CLI로 S3에서 파일 다운로드
           aws s3 cp s3://cicd-bucket-1004/docker-compose.yml /home/ec2-user/docker-compose.yml
+
+
+      - name: docker compose 사용
+        run: |
+          sudo docker compose up -d
