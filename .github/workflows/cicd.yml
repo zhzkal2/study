@@ -69,5 +69,5 @@ jobs:
             # AWS CLI로 S3에서 파일 다운로드
             aws s3 cp s3://cicd-bucket-1004/5번.png /home/ec2-user/5번.png
 
-      - name: S3 파일 다운로드
-        run:
+#      - name: S3 파일 다운로드
+#        run:
