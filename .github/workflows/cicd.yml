@@ -35,6 +35,10 @@ jobs:
       - name: Docker image build
         run: docker build -f softdelete/Dockerfile.spring -t ${{ secrets.DOCKER_USERNAME }}/spring-demo .
 
+      # 6. Docker 이미지 빌드 (Fluentd)
+      - name: Build Fluentd Docker image
+        run: docker build -f softdelete/Dockerfile.fluentd -t ${{ secrets.DOCKER_USERNAME }}/fluentd-demo .
+
       # 6. Docker
       - name: Docker login
         uses: docker/login-action@v2
@@ -43,24 +47,20 @@ jobs:
           password: ${{secrets.DOCKER_PASSWORD}}
 
       # 7. Docker 이미지 푸시
-      - name: Push Docker image
+      - name: Push Spring Boot Docker image
         run: docker push ${{ secrets.DOCKER_USERNAME }}/spring-demo
 
+      - name: Push Fluentd Docker image
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/fluentd-demo
 
   deploy:
-    name: Deploy to EC2
-    runs-on: ubuntu-latest
+    needs: build-docker-image
+    runs-on: self-hosted
     steps:
-      # 2. SSH 키 설정
-      - name: Add SSH Key
-        uses: webfactory/ssh-agent@v0.5.3
-        with:
-          ssh-private-key: ${{ secrets.EC2_SSH_KEY }}
-
-      # 3. ec2 연결
-      - name: Connect to EC2
+      # 3. ec2에 S3 파일 다운로드
+      - name: s3 file download
         run: |
-          ssh -o StrictHostKeyChecking=no ec2-user@${{ secrets.EC2_PUBLIC_IP }} << 'EOF'
+          # 만약 파일이 있다면 최신화를 위해서 삭제
             if [ -f /home/ec2-user/5번.png ]; then
               echo "File already exists. Deleting the old file."
               rm /home/ec2-user/5번.png
@@ -68,11 +68,6 @@ jobs:
             
             # AWS CLI로 S3에서 파일 다운로드
             aws s3 cp s3://cicd-bucket-1004/5번.png /home/ec2-user/5번.png
-          
-            # 다운로드한 파일 존재 여부 확인
-            if [ -f /home/ec2-user/5번.png ]; then
-              echo "File downloaded successfully."
-            else
-              echo "File download failed."
-            fi
-          EOF
+
+      - name: S3 파일 다운로드
+        run:
